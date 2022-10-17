@@ -16,6 +16,8 @@ def init():
 def inference(model_inputs:dict) -> dict:
     global model
 
+    print ("testing")
+
     # Parse out your arguments
     mp3BytesString = model_inputs.get('mp3BytesString', None)
     if mp3BytesString == None:
