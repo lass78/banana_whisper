@@ -6,6 +6,9 @@ from io import BytesIO
 import base64
 import banana_dev as banana
 
+# apikey = 
+# modelkey = 
+
 #Needs test.mp3 file in directory
 with open(f'test.mp3','rb') as file:
     mp3bytes = BytesIO(file.read())
@@ -18,4 +21,4 @@ print(res.text)
 
 
 #use following to call deployed model on banana, model_payload is same as above
-out = banana.run("apikey","modelkey",model_payload)
+# out = banana.run("apikey","modelkey",model_payload)

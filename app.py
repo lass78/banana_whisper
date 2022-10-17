@@ -16,7 +16,7 @@ def init():
 def inference(model_inputs:dict) -> dict:
     global model
 
-    print ("testing")
+    print ("testing2")
 
     # Parse out your arguments
     mp3BytesString = model_inputs.get('mp3BytesString', None)
@@ -28,8 +28,20 @@ def inference(model_inputs:dict) -> dict:
         file.write(mp3Bytes.getbuffer())
     
     # Run the model
-    result = model.transcribe("input.mp3")
-    output = {"text":result["text"]}
+    mel = whisper.log_mel_spectrogram(whisper.pad_or_trim(whisper.load_audio('input.mp3'))).to(model.device)
+  
+    _, probs = model.detect_language(mel)
+    language = max(probs, key=probs.get)
+
+    print("LANGUAGE: ", language)
+    if (language == "da" or language == 'en'): 
+        task = 'transcribe' 
+    else: 
+        task = 'translate'
+
+
+    options = dict(language='da', beam_size=5, best_of=5, task=task)
+    result = model.transcribe("input.mp3", **options)
     os.remove("input.mp3")
     # Return the results as a dictionary
-    return output
+    return result
