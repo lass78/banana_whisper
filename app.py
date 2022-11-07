@@ -23,15 +23,19 @@ def inference(model_inputs:dict) -> dict:
     if mp3BytesString == None:
         return {'message': "No input provided"}
     
+    
     mp3Bytes = BytesIO(base64.b64decode(mp3BytesString.encode("ISO-8859-1")))
     with open('input.mp3','wb') as file:
         file.write(mp3Bytes.getbuffer())
     
     # Run the model
-    mel = whisper.log_mel_spectrogram(whisper.pad_or_trim(whisper.load_audio('input.mp3'))).to(model.device)
+    
+    language = model_inputs.get('language', None)
+    if language == None:
+        mel = whisper.log_mel_spectrogram(whisper.pad_or_trim(whisper.load_audio('input.mp3'))).to(model.device)
   
-    _, probs = model.detect_language(mel)
-    language = max(probs, key=probs.get)
+        _, probs = model.detect_language(mel)
+        language = max(probs, key=probs.get)
 
     print("LANGUAGE: ", language)
     if (language == "da" or language == 'en'): 
