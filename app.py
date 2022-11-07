@@ -40,7 +40,7 @@ def inference(model_inputs:dict) -> dict:
         task = 'translate'
 
 
-    options = dict(language='da', beam_size=5, best_of=5, task=task)
+    options = dict(language=language, beam_size=5, best_of=5, task=task)
     result = model.transcribe("input.mp3", **options)
     os.remove("input.mp3")
     # Return the results as a dictionary
