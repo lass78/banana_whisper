@@ -31,6 +31,7 @@ def inference(model_inputs:dict) -> dict:
     # Run the model
     
     language = model_inputs.get('language', None)
+    task = model_inputs.get('task', None)
     if language == None:
         mel = whisper.log_mel_spectrogram(whisper.pad_or_trim(whisper.load_audio('input.mp3'))).to(model.device)
   
@@ -38,10 +39,11 @@ def inference(model_inputs:dict) -> dict:
         language = max(probs, key=probs.get)
 
     print("LANGUAGE: ", language)
-    if (language == "da" or language == 'en'): 
-        task = 'transcribe' 
-    else: 
-        task = 'translate'
+    if task == None:
+        if (language == "da" or language == 'en'): 
+            task = 'transcribe' 
+        else: 
+            task = 'translate'
 
 
     options = dict(language=language, beam_size=5, best_of=5, task=task)
